@@ -34,7 +34,7 @@ TWEETS_PER_DAY_THRESHOLD = 1
 
 def create_randomized_message():
     result = list(STATUS_MESSAGE_BASE)
-    result.insert(random.randrange(STATUS_MESSAGE_LEN), '.')
+    result.insert(random.randrange(STATUS_MESSAGE_LEN), '\u200c')
     return ''.join(result)
 
 
