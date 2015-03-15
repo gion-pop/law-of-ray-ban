@@ -27,7 +27,7 @@ QUERY = ','.join([
     'goo.gl/YbVS1w',
 ])
 WEB_CLIENT_SOURCE = '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>'
-STATUS_MESSAGE_BASE = list('は逝ってしまったわ、レイバンの理に導かれて……。')
+STATUS_MESSAGE_BASE = list('は逝ってしまったわ、レイバンの理に導かれて……。（試験運用中）')
 STATUS_MESSAGE_LEN = len(STATUS_MESSAGE_BASE)
 N_RECENT_USER = 32
 TWEETS_PER_DAY_THRESHOLD = 1
