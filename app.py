@@ -1,3 +1,5 @@
+import datetime
+
 # "TwitterAPI" library on PyPI
 from TwitterAPI import (
     TwitterAPI,
@@ -24,6 +26,18 @@ QUERY = ','.join([
 ])
 STATUS_MESSAGE = '.@{} は逝ってしまったわ、レイバンの理に導かれて……。'
 N_RECENT_USER = 32
+TWEETS_PER_DAY_THRESHOLD = 2
+
+
+def is_active_user(tweet):
+    created_at = datetime.datetime.strptime(
+        tweet['user']['created_at'],
+        '%a %b %d %H:%M:%S +0000 %Y'
+    )
+    today = datetime.datetime.today()
+    n_tweet = tweet['user']['statuses_count']
+
+    return n_tweet / (today - created_at).days > TWEETS_PER_DAY_THRESHOLD
 
 
 def get_next_user():
