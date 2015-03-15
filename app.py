@@ -62,7 +62,7 @@ def get_next_user():
             recent_users.append(screen_name)
             if len(screen_name) > N_RECENT_USER:
                 recent_users.pop(0)
-            yield screen_name
+            yield (screen_name, tweet['id'])
 
 
 def get_next_tweet():
@@ -89,13 +89,14 @@ def get_next_tweet():
 
 
 if __name__ == '__main__':
-    for screen_name in get_next_user():
+    for (screen_name, status_id) in get_next_user():
         result = api.request(
             'statuses/update',
             {
                 'status':
                 ('.@{} ' + create_randomized_message()).format(screen_name),
                 'trim_user': True,
+                'in_reply_to_status_id': status_id,
             }
         )
         if result.status_code == 200:
