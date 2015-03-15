@@ -24,9 +24,10 @@ QUERY = ','.join([
     'goo.gl/pVssDM',
     'bit.ly/1CbwA6e',
 ])
+WEB_CLIENT_SOURCE = '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>'
 STATUS_MESSAGE = '.@{} は逝ってしまったわ、レイバンの理に導かれて……。'
 N_RECENT_USER = 32
-TWEETS_PER_DAY_THRESHOLD = 2
+TWEETS_PER_DAY_THRESHOLD = 1
 
 
 def is_active_user(tweet):
@@ -45,7 +46,10 @@ def get_next_user():
     for tweet in get_next_tweet():
         screen_name = tweet['user']['screen_name']
 
-        if screen_name not in recent_users:
+        if is_active_user(tweet) \
+           and 'retweet_status' not in tweet \
+           and tweet['source'] == WEB_CLIENT_SOURCE \
+           and screen_name not in recent_users:
             recent_users.append(screen_name)
             if len(screen_name) > N_RECENT_USER:
                 recent_users.pop(0)
