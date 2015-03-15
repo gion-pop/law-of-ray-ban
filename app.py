@@ -18,24 +18,36 @@ api = TwitterAPI(
     ACCESS_TOKEN_SECRET
 )
 
-
-RAYBAN_URLS = ['http://goo.gl/pVssDM']
+QUERY = ','.join([
+    'goo.gl/pVssDM',
+    'bit.ly/1CbwA6e',
+])
 STATUS_MESSAGE = '.@{} は逝ってしまったわ、レイバンの理に導かれて……。'
 N_RECENT_USER = 32
 
 
 def get_next_user():
+    recent_users = []
+    for tweet in get_next_tweet():
+        screen_name = tweet['user']['screen_name']
+
+        if screen_name not in recent_users:
+            recent_users.append(screen_name)
+            if len(screen_name) > N_RECENT_USER:
+                recent_users.pop(0)
+            yield screen_name
+
+
+def get_next_tweet():
     iterator = api.request(
         'statuses/filter',
-        {'track': 'goo gl pVssDM'}
+        {'track': QUERY}
     ).get_iterator()
 
     try:
         for tweet in iterator:
             if 'text' in tweet:
-                for url in tweet['entities']['urls']:
-                    if url.get('expanded_url', None) in RAYBAN_URLS:
-                        yield tweet['user']['screen_name']
+                yield tweet
 
             elif 'disconnect' in tweet:
                 print('[Disconnect] {}'.format(tweet['disconnect']['reason']))
@@ -50,20 +62,15 @@ def get_next_user():
 
 
 if __name__ == '__main__':
-    recent_users = []
     for screen_name in get_next_user():
-        if screen_name not in recent_users:
-            result = api.request(
-                'statuses/update',
-                {
-                    'status': STATUS_MESSAGE.format(screen_name),
-                    'trim_user': True,
-                }
-            )
-            if result.status_code == 200:
-                print('[SUCCESS] @{}'.format(screen_name))
-            else:
-                print('[FAILURE] @{}: {}'.format(screen_name, result.text))
-            recent_users.append(screen_name)
-            if len(screen_name) > N_RECENT_USER:
-                recent_users.pop(0)
+        result = api.request(
+            'statuses/update',
+            {
+                'status': STATUS_MESSAGE.format(screen_name),
+                'trim_user': True,
+            }
+        )
+        if result.status_code == 200:
+            print('[SUCCESS] @{}'.format(screen_name))
+        else:
+            print('[FAILURE] @{}: {}'.format(screen_name, result.text))
