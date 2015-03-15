@@ -1,4 +1,5 @@
 import datetime
+import random
 
 # "TwitterAPI" library on PyPI
 from TwitterAPI import (
@@ -25,9 +26,16 @@ QUERY = ','.join([
     'bit.ly/1CbwA6e',
 ])
 WEB_CLIENT_SOURCE = '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>'
-STATUS_MESSAGE = '.@{} は逝ってしまったわ、レイバンの理に導かれて……。'
+STATUS_MESSAGE_BASE = list('は逝ってしまったわ、レイバンの理に導かれて……。')
+STATUS_MESSAGE_LEN = len(STATUS_MESSAGE_BASE)
 N_RECENT_USER = 32
 TWEETS_PER_DAY_THRESHOLD = 1
+
+
+def create_randomized_message():
+    result = list(STATUS_MESSAGE_BASE)
+    result.insert(random.randrange(STATUS_MESSAGE_LEN), '.')
+    return ''.join(result)
 
 
 def is_active_user(tweet):
@@ -84,7 +92,8 @@ if __name__ == '__main__':
         result = api.request(
             'statuses/update',
             {
-                'status': STATUS_MESSAGE.format(screen_name),
+                'status':
+                ('.@{} ' + create_randomized_message()).format(screen_name),
                 'trim_user': True,
             }
         )
