@@ -24,6 +24,7 @@ api = TwitterAPI(
 QUERY = ','.join([
     'goo.gl/pVssDM',
     'bit.ly/1CbwA6e',
+    'goo.gl/YbVS1w',
 ])
 WEB_CLIENT_SOURCE = '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>'
 STATUS_MESSAGE_BASE = list('は逝ってしまったわ、レイバンの理に導かれて……。')
