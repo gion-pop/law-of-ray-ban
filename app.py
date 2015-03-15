@@ -68,7 +68,10 @@ def get_next_user():
 def get_next_tweet():
     iterator = api.request(
         'statuses/filter',
-        {'track': QUERY}
+        {
+            'track': QUERY,
+            'language': ['ja'],
+        }
     ).get_iterator()
 
     try:
